@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 bool (*b58_sha256_impl)(void *, const void *, size_t) = NULL;
@@ -114,4 +115,51 @@ int b58check(const void *bin, size_t binsz, const char *base58str, size_t b58sz)
 		return -3;
 	
 	return binc[0];
+}
+
+static const char b58digits_ordered[] = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+
+bool b58enc(char *b58, size_t *b58sz, const uint8_t *bin, size_t binsz)
+{
+	int i, j, carry, high, zcount = 0;
+	size_t size;
+	uint8_t *buf;
+	
+	while (zcount < binsz && !bin[zcount])
+		++zcount;
+	
+	size = (binsz - zcount) * 138 / 100 + 1;
+	buf = malloc(size);
+	if (!buf)
+		return false;
+	memset(buf, 0, size);
+	
+	for (i = zcount, high = size - 1; i < binsz; ++i, high = j)
+	{
+		for (carry = bin[i], j = size - 1; (j > high) || carry; --j)
+		{
+			carry += 256 * buf[j];
+			buf[j] = carry % 58;
+			carry /= 58;
+		}
+	}
+	
+	for (j = 0; j < size && !buf[j]; ++j);
+	
+	if (*b58sz <= zcount + size - j)
+	{
+		free(buf);
+		*b58sz = zcount + size - j + 1;
+		return false;
+	}
+	
+	if (zcount)
+		memset(b58, '1', zcount);
+	for (i = zcount; j < size; ++i, ++j)
+		b58[i] = b58digits[buf[j]];
+	b58[i] = '\0';
+	*b58sz = i + 1;
+	
+	free(buf);
+	return true;
 }
