@@ -20,3 +20,15 @@ bin_PROGRAMS = base58
 base58_SOURCES = clitool.c
 base58_CFLAGS = $(LIBGCRYPT_CFLAGS)
 base58_LDADD = libbase58.la $(LIBGCRYPT_LIBS)
+
+TESTS = \
+	tests/decode.sh \
+	tests/decode-b58c.sh \
+	tests/decode-b58c-fail.sh \
+	tests/decode-b58c-null.sh \
+	tests/encode.sh \
+	tests/encode-b58c.sh \
+	tests/encode-fail.sh
+TEST_EXTENSIONS = .sh
+SH_LOG_COMPILER = /bin/sh
+AM_TESTS_ENVIRONMENT = PATH='$(srcdir)':"$$PATH"; export PATH;
