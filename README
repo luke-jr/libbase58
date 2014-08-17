@@ -27,3 +27,16 @@ function:
 Call it with the same buffers used for b58tobin. If the return value is
 negative, an error occurred. Otherwise, the return value is the base58check
 "version" byte from the decoded data.
+
+
+Encoding Base58
+---------------
+
+Allocate a string to store the base58 content, create a size_t variable with the
+size of that allocation, and call:
+	bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
+Note that you must pass a pointer to the string size variable, not the size
+itself. When b58enc returns, the variable will be modified to contain the actual
+number of bytes used (including the null terminator). If encoding fails for any
+reason, or if the string buffer is not large enough for the result, b58enc will
+return false. Otherwise, it returns true to indicate success.
