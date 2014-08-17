@@ -18,7 +18,7 @@
 
 bool (*b58_sha256_impl)(void *, const void *, size_t) = NULL;
 
-static const int8_t b58digits[] = {
+static const int8_t b58digits_map[] = {
 	-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,
 	-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,
 	-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,
@@ -51,10 +51,10 @@ bool b58tobin(void *bin, size_t binsz, const char *b58, size_t b58sz)
 		if (b58u[i] & 0x80)
 			// High-bit set on invalid digit
 			return false;
-		if (b58digits[b58u[i]] == -1)
+		if (b58digits_map[b58u[i]] == -1)
 			// Invalid base58 digit
 			return false;
-		c = b58digits[b58u[i]];
+		c = b58digits_map[b58u[i]];
 		for (j = outisz; j--; )
 		{
 			t = ((uint64_t)outi[j]) * 58 + c;
@@ -152,7 +152,7 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 	if (zcount)
 		memset(b58, '1', zcount);
 	for (i = zcount; j < size; ++i, ++j)
-		b58[i] = b58digits[buf[j]];
+		b58[i] = b58digits_ordered[buf[j]];
 	b58[i] = '\0';
 	*b58sz = i + 1;
 	
