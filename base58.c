@@ -97,10 +97,10 @@ bool my_dblsha256(void *hash, const void *data, size_t datasz)
 	return b58_sha256_impl(buf, data, datasz) && b58_sha256_impl(hash, buf, sizeof(buf));
 }
 
-int b58check(void *bin, size_t binsz, const char *base58str, size_t b58sz)
+int b58check(const void *bin, size_t binsz, const char *base58str, size_t b58sz)
 {
 	unsigned char buf[32];
-	unsigned char *binc = bin;
+	const uint8_t *binc = bin;
 	unsigned i;
 	if (!my_dblsha256(buf, bin, binsz - 4))
 		return -2;
