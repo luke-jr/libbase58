@@ -1,0 +1,29 @@
+Initialisation
+--------------
+
+Before you can use libbase58 for base58check, you must provide a SHA256
+function. The required function signature is:
+	bool my_sha256(void *digest, const void *data, size_t datasz)
+Simply assign your function to b58_sha256_impl:
+	b58_sha256_impl = my_sha256;
+
+This is only required if base58check is used. Raw base58 does not need SHA256.
+
+
+Decoding Base58
+---------------
+
+Simply allocate a buffer to store the binary data in, and call the b58tobin
+function:
+	bool b58tobin(void *bin, size_t binsz, const char *b58, size_t b58sz)
+
+
+Validating Base58Check
+----------------------
+
+After calling b58tobin, you can validate base58check data using the b58check
+function:
+	int b58check(const void *bin, size_t binsz, const char *b58, size_t b58sz)
+Call it with the same buffers used for b58tobin. If the return value is
+negative, an error occurred. Otherwise, the return value is the base58check
+"version" byte from the decoded data.

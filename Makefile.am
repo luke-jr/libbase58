@@ -14,3 +14,4 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libbase58.pc
 
 dist_noinst_SCRIPTS = autogen.sh
+dist_doc_DATA = README
