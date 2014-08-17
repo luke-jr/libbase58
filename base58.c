@@ -119,8 +119,9 @@ int b58check(const void *bin, size_t binsz, const char *base58str, size_t b58sz)
 
 static const char b58digits_ordered[] = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
-bool b58enc(char *b58, size_t *b58sz, const uint8_t *bin, size_t binsz)
+bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 {
+	const uint8_t *bin = data;
 	int i, j, carry, high, zcount = 0;
 	size_t size;
 	uint8_t *buf;
