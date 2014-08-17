@@ -16,6 +16,7 @@ pkgconfig_DATA = libbase58.pc
 dist_noinst_SCRIPTS = autogen.sh
 dist_doc_DATA = README
 
+if USE_TOOL
 bin_PROGRAMS = base58
 base58_SOURCES = clitool.c
 base58_CFLAGS = $(LIBGCRYPT_CFLAGS)
@@ -29,6 +30,7 @@ TESTS = \
 	tests/encode.sh \
 	tests/encode-b58c.sh \
 	tests/encode-fail.sh
-TEST_EXTENSIONS = .sh
 SH_LOG_COMPILER = /bin/sh
 AM_TESTS_ENVIRONMENT = PATH='$(srcdir)':"$$PATH"; export PATH;
+endif
+TEST_EXTENSIONS = .sh
