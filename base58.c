@@ -14,7 +14,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdlib.h>
 #include <string.h>
 
 bool (*b58_sha256_impl)(void *, const void *, size_t) = NULL;
@@ -124,15 +123,12 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 	const uint8_t *bin = data;
 	int i, j, carry, high, zcount = 0;
 	size_t size;
-	uint8_t *buf;
 	
 	while (zcount < binsz && !bin[zcount])
 		++zcount;
 	
 	size = (binsz - zcount) * 138 / 100 + 1;
-	buf = malloc(size);
-	if (!buf)
-		return false;
+	uint8_t buf[size];
 	memset(buf, 0, size);
 	
 	for (i = zcount, high = size - 1; i < binsz; ++i, high = j)
@@ -149,7 +145,6 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 	
 	if (*b58sz <= zcount + size - j)
 	{
-		free(buf);
 		*b58sz = zcount + size - j + 1;
 		return false;
 	}
@@ -161,6 +156,5 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 	b58[i] = '\0';
 	*b58sz = i + 1;
 	
-	free(buf);
 	return true;
 }
