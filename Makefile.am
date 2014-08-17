@@ -15,3 +15,8 @@ pkgconfig_DATA = libbase58.pc
 
 dist_noinst_SCRIPTS = autogen.sh
 dist_doc_DATA = README
+
+bin_PROGRAMS = base58
+base58_SOURCES = clitool.c
+base58_CFLAGS = $(LIBGCRYPT_CFLAGS)
+base58_LDADD = libbase58.la $(LIBGCRYPT_LIBS)

@@ -19,3 +19,4 @@ Makefile.in
 .libs
 ii
 *.tar*
+base58

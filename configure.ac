@@ -25,4 +25,20 @@ AC_CONFIG_FILES([Makefile
 
 AC_CHECK_LIB([ws2_32], [strchr])
 
+AC_ARG_ENABLE([tool],
+	[AC_HELP_STRING([--disable-tool],[Compile command line base58 tool (default enabled)])],
+	[use_tool=$enableval],
+	[use_tool=auto])
+if test x$use_tool != xno; then
+	AM_PATH_LIBGCRYPT([],[
+		use_tool=yes
+	],[
+		if test x$use_tool = xyes; then
+			AC_MSG_ERROR([libgcrypt not found; use --disable-tool])
+		fi
+		use_tool=no
+	])
+fi
+AM_CONDITIONAL([USE_TOOL], [test x$use_tool = xyes])
+
 AC_OUTPUT
