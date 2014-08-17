@@ -158,3 +158,19 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 	
 	return true;
 }
+
+bool b58check_enc(char *b58c, size_t *b58c_sz, uint8_t ver, const void *data, size_t datasz)
+{
+	uint8_t buf[1 + datasz + 0x20];
+	uint8_t *hash = &buf[1 + datasz];
+	
+	buf[0] = ver;
+	memcpy(&buf[1], data, datasz);
+	if (!my_dblsha256(hash, buf, datasz + 1))
+	{
+		*b58c_sz = 0;
+		return false;
+	}
+	
+	return b58enc(b58c, b58c_sz, buf, 1 + datasz + 4);
+}
