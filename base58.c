@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Luke Dashjr
+ * Copyright 2012-2014 Luke Dashjr
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the standard MIT license.  See COPYING for more details.
@@ -12,10 +12,11 @@
 #endif
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 
-bool (*blkmk_sha256_impl)(void *, const void *, size_t) = NULL;
+bool (*b58_sha256_impl)(void *, const void *, size_t) = NULL;
 
 static const int8_t b58digits[] = {
 	-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,
@@ -28,7 +29,8 @@ static const int8_t b58digits[] = {
 	47,48,49,50,51,52,53,54, 55,56,57,-1,-1,-1,-1,-1,
 };
 
-bool _blkmk_b58tobin(void *bin, size_t binsz, const char *b58, size_t b58sz) {
+bool b58tobin(void *bin, size_t binsz, const char *b58, size_t b58sz)
+{
 	const unsigned char *b58u = (void*)b58;
 	unsigned char *binu = bin;
 	size_t outisz = (binsz + 3) / 4;
@@ -89,15 +91,18 @@ bool _blkmk_b58tobin(void *bin, size_t binsz, const char *b58, size_t b58sz) {
 }
 
 static
-bool _blkmk_dblsha256(void *hash, const void *data, size_t datasz) {
-	return blkmk_sha256_impl(hash, data, datasz) && blkmk_sha256_impl(hash, hash, 32);
+bool my_dblsha256(void *hash, const void *data, size_t datasz)
+{
+	uint8_t buf[0x20];
+	return b58_sha256_impl(buf, data, datasz) && b58_sha256_impl(hash, buf, sizeof(buf));
 }
 
-int _blkmk_b58check(void *bin, size_t binsz, const char *base58str) {
+int b58check(void *bin, size_t binsz, const char *base58str, size_t b58sz)
+{
 	unsigned char buf[32];
 	unsigned char *binc = bin;
 	unsigned i;
-	if (!_blkmk_dblsha256(buf, bin, binsz - 4))
+	if (!my_dblsha256(buf, bin, binsz - 4))
 		return -2;
 	if (memcmp(&binc[binsz - 4], buf, 4))
 		return -1;
