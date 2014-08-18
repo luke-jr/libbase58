@@ -71,16 +71,33 @@ int main(int argc, char **argv)
 	if (decode)
 	{
 		uint8_t bin[decode];
-		if (!b58tobin(bin, decode, r, rt))
+		size_t ssz = decode;
+		if (!b58tobin(bin, &ssz, r, rt))
 			return 2;
 		if (b58c)
 		{
 			int chk = b58check(bin, decode, r, rt);
 			if (chk < 0)
 				return chk;
+			if (fwrite(bin, decode, 1, stdout) != 1)
+				return 3;
 		}
-		if (fwrite(bin, decode, 1, stdout) != 1)
-			return 3;
+		else
+		{
+			// Raw base58 doesn't check length match
+			uint8_t cbin[ssz];
+			if (ssz > decode)
+			{
+				size_t zeros = ssz - decode;
+				memset(cbin, 0, zeros);
+				memcpy(&cbin[zeros], bin, decode);
+			}
+			else
+				memcpy(cbin, &bin[decode - ssz], ssz);
+			
+			if (fwrite(cbin, ssz, 1, stdout) != 1)
+				return 3;
+		}
 	}
 	else
 	{

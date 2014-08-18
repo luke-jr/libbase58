@@ -13,9 +13,12 @@ This is only required if base58check is used. Raw base58 does not need SHA256.
 Decoding Base58
 ---------------
 
-Simply allocate a buffer to store the binary data in, and call the b58tobin
-function:
-	bool b58tobin(void *bin, size_t binsz, const char *b58, size_t b58sz)
+Simply allocate a buffer to store the binary data in, and set a variable with
+the buffer size, and call the b58tobin function:
+	bool b58tobin(void *bin, size_t *binsz, const char *b58, size_t b58sz)
+The "canonical" base58 byte length will be assigned to binsz on success, which
+may be larger than the actual buffer if the input has many leading zeros.
+Regardless of the canonical byte length, the full binary buffer will be used.
 If b58sz is zero, it will be initialised with strlen(b58); note that a true
 zero-length base58 string is not supported here.
 

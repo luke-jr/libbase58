@@ -29,8 +29,9 @@ static const int8_t b58digits_map[] = {
 	47,48,49,50,51,52,53,54, 55,56,57,-1,-1,-1,-1,-1,
 };
 
-bool b58tobin(void *bin, size_t binsz, const char *b58, size_t b58sz)
+bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 {
+	size_t binsz = *binszp;
 	const unsigned char *b58u = (void*)b58;
 	unsigned char *binu = bin;
 	size_t outisz = (binsz + 3) / 4;
@@ -40,13 +41,18 @@ bool b58tobin(void *bin, size_t binsz, const char *b58, size_t b58sz)
 	size_t i, j;
 	uint8_t bytesleft = binsz % 4;
 	uint32_t zeromask = ~((1 << ((bytesleft) * 8)) - 1);
+	unsigned zerocount = 0;
 	
 	if (!b58sz)
 		b58sz = strlen(b58);
 	
 	memset(outi, 0, outisz * sizeof(*outi));
 	
-	for (i = 0; i < b58sz; ++i)
+	// Leading zeros, just count
+	for (i = 0; i < b58sz && !b58digits_map[b58u[i]]; ++i)
+		++zerocount;
+	
+	for ( ; i < b58sz; ++i)
 	{
 		if (b58u[i] & 0x80)
 			// High-bit set on invalid digit
@@ -87,6 +93,17 @@ bool b58tobin(void *bin, size_t binsz, const char *b58, size_t b58sz)
 		*((uint32_t*)binu) = htonl(outi[j]);
 		binu += sizeof(uint32_t);
 	}
+	
+	// Count canonical base58 byte count
+	binu = bin;
+	for (i = 0; i < binsz; ++i)
+	{
+		if (binu[i])
+			break;
+		--*binszp;
+	}
+	*binszp += zerocount;
+	
 	return true;
 }
 

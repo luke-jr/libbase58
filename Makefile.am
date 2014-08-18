@@ -27,6 +27,9 @@ TESTS = \
 	tests/decode-b58c.sh \
 	tests/decode-b58c-fail.sh \
 	tests/decode-b58c-null.sh \
+	tests/decode-b58c-toolong.sh \
+	tests/decode-b58c-tooshort.sh \
+	tests/decode-zero.sh \
 	tests/encode.sh \
 	tests/encode-b58c.sh \
 	tests/encode-fail.sh
