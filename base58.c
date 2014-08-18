@@ -40,7 +40,7 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	uint32_t c;
 	size_t i, j;
 	uint8_t bytesleft = binsz % 4;
-	uint32_t zeromask = ~((1 << ((bytesleft) * 8)) - 1);
+	uint32_t zeromask = ~((1 << ((bytesleft ?: 4) * 8)) - 1);
 	unsigned zerocount = 0;
 	
 	if (!b58sz)
