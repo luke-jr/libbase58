@@ -8,7 +8,7 @@
 
 #include <gcrypt.h>
 
-#include "base58.h"
+#include "libbase58.h"
 
 static
 bool my_sha256(void *digest, const void *data, size_t datasz)
