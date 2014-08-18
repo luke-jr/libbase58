@@ -29,10 +29,12 @@ TESTS = \
 	tests/decode-b58c-null.sh \
 	tests/decode-b58c-toolong.sh \
 	tests/decode-b58c-tooshort.sh \
+	tests/decode-small.sh \
 	tests/decode-zero.sh \
 	tests/encode.sh \
 	tests/encode-b58c.sh \
-	tests/encode-fail.sh
+	tests/encode-fail.sh \
+	tests/encode-small.sh
 SH_LOG_COMPILER = /bin/sh
 AM_TESTS_ENVIRONMENT = PATH='$(srcdir)':"$$PATH"; export PATH;
 endif
