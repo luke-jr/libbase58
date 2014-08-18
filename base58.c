@@ -90,8 +90,10 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	
 	for (; j < outisz; ++j)
 	{
-		*((uint32_t*)binu) = htonl(outi[j]);
-		binu += sizeof(uint32_t);
+		*(binu++) = outi[j] >> 0x18;
+		*(binu++) = outi[j] >> 0x10;
+		*(binu++) = outi[j] >>    8;
+		*(binu++) = outi[j];
 	}
 	
 	// Count canonical base58 byte count
