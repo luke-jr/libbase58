@@ -16,6 +16,8 @@ Decoding Base58
 Simply allocate a buffer to store the binary data in, and call the b58tobin
 function:
 	bool b58tobin(void *bin, size_t binsz, const char *b58, size_t b58sz)
+If b58sz is zero, it will be initialised with strlen(b58); note that a true
+zero-length base58 string is not supported here.
 
 
 Validating Base58Check
