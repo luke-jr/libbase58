@@ -102,6 +102,8 @@ int b58check(const void *bin, size_t binsz, const char *base58str, size_t b58sz)
 	unsigned char buf[32];
 	const uint8_t *binc = bin;
 	unsigned i;
+	if (binsz < 4)
+		return -4;
 	if (!my_dblsha256(buf, bin, binsz - 4))
 		return -2;
 	if (memcmp(&binc[binsz - 4], buf, 4))
