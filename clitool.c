@@ -1,3 +1,10 @@
+/*
+ * Copyright 2014 Luke Dashjr
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the standard MIT license.  See COPYING for more details.
+ */
+
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdint.h>
