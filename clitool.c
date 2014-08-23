@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 	}
 	
 	size_t rt;
-	uint8_t *r;
+	void *r;
 	if (optind >= argc)
 	{
 		rt = 0;
@@ -56,16 +56,19 @@ int main(int argc, char **argv)
 		while (!feof(stdin))
 		{
 			r = realloc(r, rt + 0x100);
-			rt += fread(&r[rt], 1, 0x100, stdin);
+			rt += fread(r + rt, 1, 0x100, stdin);
 		}
 		if (decode)
-			while (isspace(r[rt-1]))
+		{
+			char *rs = r;
+			while (isspace(rs[rt-1]))
 				--rt;
+		}
 	}
 	else
 	{
 		r = argv[optind];
-		rt = strlen(r);
+		rt = strlen(argv[optind]);
 	}
 	
 	if (decode)
@@ -105,7 +108,11 @@ int main(int argc, char **argv)
 		char s[ssz];
 		bool rv;
 		if (b58c)
-			rv = rt && b58check_enc(s, &ssz, r[0], &r[1], rt-1);
+		{
+			uint8_t *verbyte = r;
+			r += 1;
+			rv = rt && b58check_enc(s, &ssz, *verbyte, r, rt-1);
+		}
 		else
 			rv = b58enc(s, &ssz, r, rt);
 		if (!rv)
