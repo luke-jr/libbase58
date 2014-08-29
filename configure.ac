@@ -10,7 +10,7 @@ AC_INIT(
 	[libbase58])
 AC_CONFIG_AUX_DIR([.])
 AC_PREREQ([2.59])
-AM_INIT_AUTOMAKE([1.12 -Wall dist-xz foreign])
+AM_INIT_AUTOMAKE([1.11 -Wall dist-xz foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 AC_PROG_CC_C99
