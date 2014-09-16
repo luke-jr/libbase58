@@ -36,7 +36,7 @@ void usage(const char *prog)
 int main(int argc, char **argv)
 {
 	bool b58c = false;
-	int decode = 0;
+	size_t decode = 0;
 	int opt;
 	while ( (opt = getopt(argc, argv, "cd:h")) != -1)
 	{
@@ -47,34 +47,39 @@ int main(int argc, char **argv)
 				b58_sha256_impl = my_sha256;
 				break;
 			case 'd':
-				decode = atoi(optarg);
+			{
+				int i = atoi(optarg);
+				if (i < 0 || (uintmax_t)i >= SIZE_MAX)
+					usage(argv[0]);
+				decode = (size_t)i;
 				break;
+			}
 			default:
 				usage(argv[0]);
 		}
 	}
 	
 	size_t rt;
-	void *r;
+	union {
+		uint8_t *b;
+		char *s;
+	} r;
 	if (optind >= argc)
 	{
 		rt = 0;
-		r = NULL;
+		r.b = NULL;
 		while (!feof(stdin))
 		{
-			r = realloc(r, rt + 0x100);
-			rt += fread(r + rt, 1, 0x100, stdin);
+			r.b = realloc(r.b, rt + 0x100);
+			rt += fread(&r.b[rt], 1, 0x100, stdin);
 		}
 		if (decode)
-		{
-			char *rs = r;
-			while (isspace(rs[rt-1]))
+			while (isspace(r.s[rt-1]))
 				--rt;
-		}
 	}
 	else
 	{
-		r = argv[optind];
+		r.s = argv[optind];
 		rt = strlen(argv[optind]);
 	}
 	
@@ -82,11 +87,11 @@ int main(int argc, char **argv)
 	{
 		uint8_t bin[decode];
 		size_t ssz = decode;
-		if (!b58tobin(bin, &ssz, r, rt))
+		if (!b58tobin(bin, &ssz, r.s, rt))
 			return 2;
 		if (b58c)
 		{
-			int chk = b58check(bin, decode, r, rt);
+			int chk = b58check(bin, decode, r.s, rt);
 			if (chk < 0)
 				return chk;
 			if (fwrite(bin, decode, 1, stdout) != 1)
@@ -115,13 +120,9 @@ int main(int argc, char **argv)
 		char s[ssz];
 		bool rv;
 		if (b58c)
-		{
-			uint8_t *verbyte = r;
-			r += 1;
-			rv = rt && b58check_enc(s, &ssz, *verbyte, r, rt-1);
-		}
+			rv = rt && b58check_enc(s, &ssz, r.b[0], &r.b[1], rt-1);
 		else
-			rv = b58enc(s, &ssz, r, rt);
+			rv = b58enc(s, &ssz, r.b, rt);
 		if (!rv)
 			return 2;
 		puts(s);

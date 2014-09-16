@@ -16,6 +16,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "libbase58.h"
+
 bool (*b58_sha256_impl)(void *, const void *, size_t) = NULL;
 
 static const int8_t b58digits_map[] = {
@@ -60,7 +62,7 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 		if (b58digits_map[b58u[i]] == -1)
 			// Invalid base58 digit
 			return false;
-		c = b58digits_map[b58u[i]];
+		c = (unsigned)b58digits_map[b58u[i]];
 		for (j = outisz; j--; )
 		{
 			t = ((uint64_t)outi[j]) * 58 + c;
@@ -90,10 +92,10 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	
 	for (; j < outisz; ++j)
 	{
-		*(binu++) = outi[j] >> 0x18;
-		*(binu++) = outi[j] >> 0x10;
-		*(binu++) = outi[j] >>    8;
-		*(binu++) = outi[j];
+		*(binu++) = (outi[j] >> 0x18) & 0xff;
+		*(binu++) = (outi[j] >> 0x10) & 0xff;
+		*(binu++) = (outi[j] >>    8) & 0xff;
+		*(binu++) = (outi[j] >>    0) & 0xff;
 	}
 	
 	// Count canonical base58 byte count
@@ -142,7 +144,8 @@ static const char b58digits_ordered[] = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdef
 bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 {
 	const uint8_t *bin = data;
-	int i, j, carry, high, zcount = 0;
+	int carry;
+	size_t i, j, high, zcount = 0;
 	size_t size;
 	
 	while (zcount < binsz && !bin[zcount])
