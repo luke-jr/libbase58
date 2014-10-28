@@ -144,8 +144,8 @@ static const char b58digits_ordered[] = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdef
 bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 {
 	const uint8_t *bin = data;
-	int carry;
-	size_t i, j, high, zcount = 0;
+	int carry, j, high;
+	size_t i, zcount = 0;
 	size_t size;
 	
 	while (zcount < binsz && !bin[zcount])
