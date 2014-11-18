@@ -5,7 +5,7 @@ dnl * under the terms of the standard MIT license.  See COPYING for more details
 
 AC_INIT(
 	[libbase58],
-	[0.1.2],
+	[0.1.3],
 	[luke_libbase58@dashjr.org],
 	[libbase58])
 AC_CONFIG_AUX_DIR([.])
