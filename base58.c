@@ -52,7 +52,7 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	memset(outi, 0, outisz * sizeof(*outi));
 	
 	// Leading zeros, just count
-	for (i = 0; i < b58sz && !b58digits_map[b58u[i]]; ++i)
+	for (i = 0; i < b58sz && b58u[i] == '1'; ++i)
 		++zerocount;
 	
 	for ( ; i < b58sz; ++i)
