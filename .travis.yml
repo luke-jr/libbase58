@@ -1,0 +1,21 @@
+os: linux
+language: c
+compiler: gcc
+sudo: required
+matrix:
+  include:
+    - compiler: ": Complete"
+      env: CONFIGURE_OPTS="--enable-tool" PACKAGES="build-essential libgcrypt-dev" MAKE_CHECK=1
+    - compiler: ": No tools/tests"
+      env: CONFIGURE_OPTS="--disable-tool" PACKAGES="build-essential"
+  exclude:
+    - compiler: gcc
+install:
+    - if [ -n "$PACKAGES" ]; then travis_retry sudo apt-get update; fi
+    - if [ -n "$PACKAGES" ]; then travis_retry sudo apt-get install --no-install-recommends --no-upgrade -qq $PACKAGES; fi
+script:
+    - unset CC
+    - ./autogen.sh
+    - ./configure $CONFIGURE_OPTS || tail -n 1000 config.log
+    - make
+    - test -z "$MAKE_CHECK" || make check
