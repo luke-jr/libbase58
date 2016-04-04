@@ -15,7 +15,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
-#include <sys/types.h>
 
 #include "libbase58.h"
 
@@ -146,8 +145,7 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 {
 	const uint8_t *bin = data;
 	int carry;
-	ssize_t j, high;
-	size_t i, size, zcount = 0;
+	size_t i, j, size, high, zcount = 0;
 	
 	while (zcount < binsz && !bin[zcount])
 		++zcount;
