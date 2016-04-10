@@ -34,6 +34,7 @@ TESTS = \
 	tests/encode.sh \
 	tests/encode-b58c.sh \
 	tests/encode-fail.sh \
+	tests/encode-neg-index.sh \
 	tests/encode-small.sh
 SH_LOG_COMPILER = /bin/sh
 AM_TESTS_ENVIRONMENT = PATH='$(srcdir)':"$$PATH"; export PATH;
