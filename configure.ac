@@ -8,7 +8,8 @@ AC_INIT(
 	[0.1.4],
 	[luke_libbase58@dashjr.org],
 	[libbase58])
-AC_CONFIG_AUX_DIR([.])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([build-aux/m4])
 AC_PREREQ([2.59])
 AM_INIT_AUTOMAKE([1.11 -Wall dist-xz foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
