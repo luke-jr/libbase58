@@ -14,7 +14,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libbase58.pc
 
 dist_noinst_SCRIPTS = autogen.sh
-dist_doc_DATA = AUTHORS COPYING README
+dist_doc_DATA = AUTHORS COPYING INSTALL README
 
 if USE_TOOL
 bin_PROGRAMS = base58

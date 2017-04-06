@@ -1,0 +1,14 @@
+Installation
+--------------------
+# Install libgcrypt first, e.g. via `brew install libgcrypt` on OS X or libgcrypt-dev on Linux
+# Generate the final build scripts
+./autogen.sh
+# Build the CLI and library
+./configure && make
+
+Troubleshooting
+--------------------
+If libgcrypt isn't found after install, set AM_PATH_LIBGCRYPT env var to libgcrypt path 
+prior to running autogen.sh. For example, on OS X with ver 1.7.6:
+
+export AM_PATH_LIBGCRYPT="/usr/local/Cellar/libgcrypt/1.7.6/lib"
