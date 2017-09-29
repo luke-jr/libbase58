@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 		}
 		else
 		{
-			// Raw base58 doesn't check length match
+			/* Raw base58 doesn't check length match */
 			uint8_t cbin[ssz];
 			if (ssz > decode)
 			{
