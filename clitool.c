@@ -38,6 +38,12 @@ int main(int argc, char **argv)
 	bool b58c = false;
 	size_t decode = 0;
 	int opt;
+	size_t rt;
+	union {
+		uint8_t *b;
+		char *s;
+	} r;
+
 	while ( (opt = getopt(argc, argv, "cd:h")) != -1)
 	{
 		switch (opt)
@@ -59,11 +65,6 @@ int main(int argc, char **argv)
 		}
 	}
 	
-	size_t rt;
-	union {
-		uint8_t *b;
-		char *s;
-	} r;
 	if (optind >= argc)
 	{
 		rt = 0;
@@ -99,7 +100,7 @@ int main(int argc, char **argv)
 		}
 		else
 		{
-			// Raw base58 doesn't check length match
+			/* Raw base58 doesn't check length match */
 			uint8_t cbin[ssz];
 			if (ssz > decode)
 			{

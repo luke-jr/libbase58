@@ -5,7 +5,8 @@
  * under the terms of the standard MIT license.  See COPYING for more details.
  */
 
-#ifndef WIN32
+#ifndef _WIN32
+#include <alloca.h>
 #include <arpa/inet.h>
 #else
 #include <winsock2.h>
@@ -18,6 +19,10 @@
 #include <sys/types.h>
 
 #include "libbase58.h"
+
+#if defined (_MSC_VER)
+typedef SSIZE_T ssize_t;
+#endif
 
 bool (*b58_sha256_impl)(void *, const void *, size_t) = NULL;
 
@@ -38,7 +43,7 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	const unsigned char *b58u = (void*)b58;
 	unsigned char *binu = bin;
 	size_t outisz = (binsz + 3) / 4;
-	uint32_t outi[outisz];
+	uint32_t *outi = (uint32_t*) alloca(outisz * sizeof(uint32_t));
 	uint64_t t;
 	uint32_t c;
 	size_t i, j;
@@ -51,17 +56,17 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	
 	memset(outi, 0, outisz * sizeof(*outi));
 	
-	// Leading zeros, just count
+	/* Leading zeros, just count */
 	for (i = 0; i < b58sz && b58u[i] == '1'; ++i)
 		++zerocount;
 	
 	for ( ; i < b58sz; ++i)
 	{
 		if (b58u[i] & 0x80)
-			// High-bit set on invalid digit
+			/* High-bit set on invalid digit */
 			return false;
 		if (b58digits_map[b58u[i]] == -1)
-			// Invalid base58 digit
+			/* Invalid base58 digit */
 			return false;
 		c = (unsigned)b58digits_map[b58u[i]];
 		for (j = outisz; j--; )
@@ -71,10 +76,10 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 			outi[j] = t & 0xffffffff;
 		}
 		if (c)
-			// Output number too big (carry to the next int32)
+			/* Output number too big (carry to the next int32) */
 			return false;
 		if (outi[0] & zeromask)
-			// Output number too big (last int32 filled too far)
+			/* Output number too big (last int32 filled too far) */
 			return false;
 	}
 	
@@ -99,7 +104,7 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 		*(binu++) = (outi[j] >>    0) & 0xff;
 	}
 	
-	// Count canonical base58 byte count
+	/* Count canonical base58 byte count */
 	binu = bin;
 	for (i = 0; i < binsz; ++i)
 	{
@@ -131,9 +136,9 @@ int b58check(const void *bin, size_t binsz, const char *base58str, size_t b58sz)
 	if (memcmp(&binc[binsz - 4], buf, 4))
 		return -1;
 	
-	// Check number of zeros is correct AFTER verifying checksum (to avoid possibility of accessing base58str beyond the end)
+	/* Check number of zeros is correct AFTER verifying checksum (to avoid * possibility of accessing base58str beyond the end) */
 	for (i = 0; binc[i] == '\0' && base58str[i] == '1'; ++i)
-	{}  // Just finding the end of zeros, nothing to do in loop
+	{}  /* Just finding the end of zeros, nothing to do in loop */
 	if (binc[i] == '\0' || base58str[i] == '1')
 		return -3;
 	
@@ -148,12 +153,13 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 	int carry;
 	ssize_t i, j, high, zcount = 0;
 	size_t size;
+	uint8_t *buf;
 	
 	while (zcount < binsz && !bin[zcount])
 		++zcount;
 	
 	size = (binsz - zcount) * 138 / 100 + 1;
-	uint8_t buf[size];
+	buf = (uint8_t*) alloca(size);
 	memset(buf, 0, size);
 	
 	for (i = zcount, high = size - 1; i < binsz; ++i, high = j)
@@ -186,8 +192,10 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 
 bool b58check_enc(char *b58c, size_t *b58c_sz, uint8_t ver, const void *data, size_t datasz)
 {
-	uint8_t buf[1 + datasz + 0x20];
-	uint8_t *hash = &buf[1 + datasz];
+	uint8_t *buf;
+	uint8_t *hash;
+	buf = (uint8_t*) alloca(1 + datasz + 0x20);
+	hash = &buf[1 + datasz];
 	
 	buf[0] = ver;
 	memcpy(&buf[1], data, datasz);
