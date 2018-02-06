@@ -1,5 +1,7 @@
 
 
+Also i've found readable C version of this stuff:
+https://github.com/breadwallet/breadwallet-core/blob/master/BRBase58.c
 
 
 Initialisation
