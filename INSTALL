@@ -6,6 +6,12 @@ Installation
 # Build the CLI and library
 ./configure && make
 
+Dependencies
+--------------------
+Many of the test scripts depend on the "xxd" tool to convert between hexadecimal and binary.
+If this tool is not installed on your Operating System, you can probably get it as part of
+the "vim" editor from https://www.vim.org/ or by installing the vim-share package.
+
 Troubleshooting
 --------------------
 If libgcrypt isn't found after install, set AM_PATH_LIBGCRYPT env var to libgcrypt path 
