@@ -33,6 +33,7 @@ TESTS = \
 	tests/decode-zero.sh \
 	tests/encode.sh \
 	tests/encode-b58c.sh \
+	tests/encode-b58c-high.sh \
 	tests/encode-fail.sh \
 	tests/encode-neg-index.sh \
 	tests/encode-small.sh
