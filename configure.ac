@@ -24,6 +24,15 @@ AC_CONFIG_FILES([Makefile
 	libbase58.pc:libbase58.pc.in
 ])
 
+AC_C_VARARRAYS
+if test x$ac_cv_c_vararrays = xno; then
+	AC_CHECK_DECLS([_malloca],[],[
+		AC_MSG_ERROR([Couldn't figure out how to get variable-length arrays])
+	],[[
+		#include <malloc.h>
+	]])
+fi
+
 AC_CHECK_LIB([ws2_32], [strchr])
 
 m4_ifdef([AM_PATH_LIBGCRYPT], [

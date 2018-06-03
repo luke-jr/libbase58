@@ -19,6 +19,12 @@
 
 #include "libbase58.h"
 
+#ifdef HAVE_C_VARARRAYS
+# define b58_VLA(var_name, array_size)  var_name[array_size]
+#elif defined(HAVE_DECL__MALLOCA)
+# define b58_VLA(var_name, array_size)  *var_name = _malloca(array_size)
+#endif
+
 bool (*b58_sha256_impl)(void *, const void *, size_t) = NULL;
 
 static const int8_t b58digits_map[] = {
@@ -43,7 +49,7 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	const unsigned char *b58u = (void*)b58;
 	unsigned char *binu = bin;
 	size_t outisz = (binsz + sizeof(b58_almostmaxint_t) - 1) / sizeof(b58_almostmaxint_t);
-	b58_almostmaxint_t outi[outisz];
+	b58_almostmaxint_t b58_VLA(outi, outisz);
 	b58_maxint_t t;
 	b58_almostmaxint_t c;
 	size_t i, j;
@@ -154,7 +160,7 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 		++zcount;
 	
 	size = (binsz - zcount) * 138 / 100 + 1;
-	uint8_t buf[size];
+	uint8_t b58_VLA(buf, size);
 	memset(buf, 0, size);
 	
 	for (i = zcount, high = size - 1; i < binsz; ++i, high = j)
@@ -187,7 +193,7 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 
 bool b58check_enc(char *b58c, size_t *b58c_sz, uint8_t ver, const void *data, size_t datasz)
 {
-	uint8_t buf[1 + datasz + 0x20];
+	uint8_t b58_VLA(buf, 1 + datasz + 0x20);
 	uint8_t *hash = &buf[1 + datasz];
 	
 	buf[0] = ver;
