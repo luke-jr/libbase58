@@ -24,7 +24,7 @@ matrix:
             packages:
             - gcc-mingw-w64-i686
             - binutils-mingw-w64-i686
-            - mingw-w64-dev
+            - mingw-w64-i686-dev
     - compiler: ": Win64 - No tool/tests"
       env: CONFIGURE_OPTS="--disable-tool --host=x86_64-w64-mingw32 --enable-static --enable-shared"
       addons:
@@ -32,7 +32,7 @@ matrix:
             packages:
             - gcc-mingw-w64-x86-64
             - binutils-mingw-w64-x86-64
-            - mingw-w64-dev
+            - mingw-w64-x86-64-dev
   exclude:
     - compiler: gcc
 install:
