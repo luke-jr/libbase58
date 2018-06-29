@@ -33,7 +33,7 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	const unsigned char *b58u = (const unsigned char *)b58;
 	unsigned char *binu = (unsigned char *)bin;
 	size_t outisz = (binsz + 3) / 4;
-	uint32_t *outi=new uint32_t[outisz];
+	uint32_t *outi=new uint32_t[outisz]();
 	uint64_t t;
 	uint32_t c;
 	size_t i, j;
@@ -43,8 +43,6 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	
 	if (!b58sz)
 		b58sz = strlen(b58);
-	
-	memset(outi, 0, outisz * sizeof(*outi));
 	
 	// Leading zeros, just count
 	for (i = 0; i < b58sz && b58u[i] == '1'; ++i)
@@ -162,8 +160,7 @@ bool b58enc(char* b58 /* out */ ,  size_t *b58sz /* in - out */ , const void *da
 	while (zcount < binsz && !bin[zcount])
 		++zcount;
 	const unsigned int size =  (binsz - zcount) * 138 / 100 + 1; //latter is a ~logarithm of 256 to base 58
-	unsigned char *buf=new unsigned char[size];
-	memset(buf, 0, size);
+	unsigned char *buf=new unsigned char[size]();
 
 	high = size - 1;
 	for (i = zcount; i < binsz; ++i)
