@@ -130,7 +130,7 @@ static bool my_dblsha256(void *hash, const void *data, size_t datasz)
 	return b58_sha256_impl(buf, data, datasz) && b58_sha256_impl(hash, buf, sizeof(buf));
 }
 
-int b58check(const void *bin, size_t binsz, const char *base58str, size_t b58sz)
+int b58check(const void *bin, size_t binsz, const char *base58str, size_t b58sz/* for fun */)
 {
 	unsigned char buf[32];
 	const uint8_t *binc = (const uint8_t *)bin;
@@ -159,7 +159,7 @@ bool b58enc(char* b58 /* out */ ,  size_t *b58sz /* in - out */ , const void *da
 	long i, j, high, zcount = 0;	
 	while (zcount < binsz && !bin[zcount])
 		++zcount;
-	const unsigned int size =  (binsz - zcount) * 138 / 100 + 1; //latter is a ~logarithm of 256 to base 58
+	const unsigned int size =  (binsz - zcount) * 138 / 100 + 1; //latter is a smth like a logarithm of 256 to base 58 , but not exactly.
 	unsigned char *buf=new unsigned char[size]();
 
 	high = size - 1;
@@ -169,7 +169,7 @@ bool b58enc(char* b58 /* out */ ,  size_t *b58sz /* in - out */ , const void *da
 		while( carry || j > high )
 		{
 			carry += 256 * buf[j];
-			buf[j--] = carry % 58;  //as you all know 'int fifty_cent() { int j=0; return j-- ; }' has zero value      
+			buf[j--] = carry % 58;  //as you all know 'int fifty_cent() { int j=0; return j-- ; }' has a zero value      
 			carry /= 58;
 		}
 		high = j;
@@ -196,7 +196,7 @@ bool b58enc(char* b58 /* out */ ,  size_t *b58sz /* in - out */ , const void *da
 	return true;
 }
 
-bool b58check_enc(char *b58c, size_t *b58c_sz, uint8_t ver, const void *data, size_t datasz)
+bool b58check_enc(char *b58c/* out */, size_t *b58c_sz/* in - out */, uint8_t ver, const void *data, size_t datasz)
 {
 	uint8_t *buf=new uint8_t[1 + datasz + 32];
 	uint8_t *hash = &buf[1 + datasz];
@@ -209,7 +209,7 @@ bool b58check_enc(char *b58c, size_t *b58c_sz, uint8_t ver, const void *data, si
 		*b58c_sz = 0;
 		return false;
 	}
-	bool c=b58enc(b58c, b58c_sz, buf, 1 + datasz + 4);
+	bool c = b58enc(b58c, b58c_sz, buf, 1 + datasz + 4);
 	delete[] buf;
 	return c; 
 }
