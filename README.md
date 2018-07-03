@@ -3,8 +3,11 @@ Initialisation
 
 Before you can use libbase58 for base58check, you must provide a SHA256
 function. The required function signature is:
+
 	bool my_sha256(void *digest, const void *data, size_t datasz)
+
 Simply assign your function to b58_sha256_impl:
+
 	b58_sha256_impl = my_sha256;
 
 This is only required if base58check is used. Raw base58 does not need SHA256.
@@ -15,7 +18,9 @@ Decoding Base58
 
 Simply allocate a buffer to store the binary data in, and set a variable with
 the buffer size, and call the b58tobin function:
+
 	bool b58tobin(void *bin, size_t *binsz, const char *b58, size_t b58sz)
+
 The "canonical" base58 byte length will be assigned to binsz on success, which
 may be larger than the actual buffer if the input has many leading zeros.
 Regardless of the canonical byte length, the full binary buffer will be used.
@@ -28,7 +33,9 @@ Validating Base58Check
 
 After calling b58tobin, you can validate base58check data using the b58check
 function:
+
 	int b58check(const void *bin, size_t binsz, const char *b58, size_t b58sz)
+
 Call it with the same buffers used for b58tobin. If the return value is
 negative, an error occurred. Otherwise, the return value is the base58check
 "version" byte from the decoded data.
@@ -39,7 +46,9 @@ Encoding Base58
 
 Allocate a string to store the base58 content, create a size_t variable with the
 size of that allocation, and call:
+
 	bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
+
 Note that you must pass a pointer to the string size variable, not the size
 itself. When b58enc returns, the variable will be modified to contain the actual
 number of bytes used (including the null terminator). If encoding fails for any
@@ -52,5 +61,6 @@ Encoding Base58Check
 
 Targeting base58check is done similarly to raw base58 encoding, but you must
 also provide a version byte:
+
 	bool b58check_enc(char *b58c, size_t *b58c_sz, uint8_t ver,
 	                  const void *data, size_t datasz)
