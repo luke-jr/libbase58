@@ -6,13 +6,13 @@
  */
 
 
-//#include "StdAfx.h"
+
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 #include <sys/types.h>
-
 #include "libbase58.h"
+#include <algorithm>
 
 bool (*b58_sha256_impl)(void *, const void *, size_t) = NULL;
 
@@ -38,7 +38,7 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	uint32_t c;
 	size_t i, j;
 	uint8_t bytesleft = binsz % 4;
-	uint32_t zeromask = bytesleft ? (0xffffffff << (bytesleft * 8)) : 0;
+	uint32_t zeromask = bytesleft == 0 ? 0 : (0xffffffff << (bytesleft * 8));
 	unsigned int zerocount = 0;
 	
 	if (!b58sz)
@@ -68,7 +68,7 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 		for (j = outisz - 1; j + 1 > 0; j-- )     
 		{
 			t = outi[j] * 58ULL + c;
-			c = (t & 0x3f00000000ULL) >> 32;
+			c = (t  >> 32) & 0x3fULL;
 			outi[j] = t & 0xffffffffULL;
 		}
 		if (c)
@@ -90,13 +90,13 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	switch (bytesleft) 
 	{
 		case 3:
-			*(binu++) = (outi[0] &   0xff0000) >> 16;
+			*(binu++) = *((uint8_t*)outi+2);
 			/* Fall Through */ 
 		case 2:
-			*(binu++) = (outi[0] &     0xff00) >>  8;
+			*(binu++) = *((uint8_t*)outi+1);
 			/* Fall Through */ 
 		case 1:
-			*(binu++) = (outi[0] &       0xff);
+			*(binu++) = *(uint8_t*)outi;
 			++j;
 			break;
 		default:
@@ -105,10 +105,9 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	
 	for (; j < outisz; ++j)
 	{
-		*(binu++) = (outi[j] >>		24) & 0xff;  
-		*(binu++) = (outi[j] >>		16) & 0xff;
-		*(binu++) = (outi[j] >>		8) & 0xff;
-		*(binu++) = (outi[j] >>		0) & 0xff;
+		std::reverse((char *)(outi + j),(char *)(outi + j) + 4);
+		*(uint32_t*)binu =  outi[j];
+		binu = binu + 4;
 	}
 	delete[] outi;
 	//size of the result binary,modified that way that the number of leading zeroes in it replaced by the count of leading '1' symbols in given string.
