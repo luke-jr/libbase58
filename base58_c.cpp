@@ -67,9 +67,9 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 		c = (unsigned int)b58digits_map[b58u[i]];
 		for (j = outisz - 1; j + 1 > 0; j-- )     
 		{
-			t = ((uint64_t)outi[j]) * 58 + c;
-			c = (t & 0x3f00000000) >> 32;
-			outi[j] = t & 0xffffffff;
+			t = outi[j] * 58ULL + c;
+			c = (t & 0x3f00000000ULL) >> 32;
+			outi[j] = t & 0xffffffffULL;
 		}
 		if (c)
 		{
@@ -87,7 +87,8 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	}
 	
 	j = 0;
-	switch (bytesleft) {
+	switch (bytesleft) 
+	{
 		case 3:
 			*(binu++) = (outi[0] &   0xff0000) >> 16;
 			/* Fall Through */ 
@@ -109,9 +110,8 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 		*(binu++) = (outi[j] >>		8) & 0xff;
 		*(binu++) = (outi[j] >>		0) & 0xff;
 	}
-	delete[] outi;;
+	delete[] outi;
 	//size of the result binary,modified that way that the number of leading zeroes in it replaced by the count of leading '1' symbols in given string.
-	//Seems to be debug stuff that's , to be removed
 	binu = (unsigned char *)bin;
 	for (i = 0; i < binsz; ++i)
 	{
