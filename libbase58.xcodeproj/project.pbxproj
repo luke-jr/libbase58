@@ -3,18 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		AE3CF9C324D9AAB000479226 /* libbase58.h in Headers */ = {isa = PBXBuildFile; fileRef = AE3CF9C224D9AAB000479226 /* libbase58.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AE3CF9C724D9AAB600479226 /* base58.c in Sources */ = {isa = PBXBuildFile; fileRef = AE3CF9C624D9AAB600479226 /* base58.c */; };
+		AE3CF9C724D9AAB600479226 /* base58.c in Sources */ = {isa = PBXBuildFile; fileRef = AE3CF9C624D9AAB600479226 /* base58.c */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		AE3CF9B724D9A9BC00479226 /* libbase58.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = libbase58.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE3CF9C224D9AAB000479226 /* libbase58.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libbase58.h; sourceTree = "<group>"; };
-		AE3CF9C624D9AAB600479226 /* base58.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = base58.c; path = /Users/jmoore/dev/libbase58/base58.c; sourceTree = "<absolute>"; };
+		AE3CF9C624D9AAB600479226 /* base58.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = base58.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
