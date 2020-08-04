@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AE3CF9C324D9AAB000479226 /* libbase58.h in Headers */ = {isa = PBXBuildFile; fileRef = AE3CF9C224D9AAB000479226 /* libbase58.h */; };
+		AE3CF9C324D9AAB000479226 /* libbase58.h in Headers */ = {isa = PBXBuildFile; fileRef = AE3CF9C224D9AAB000479226 /* libbase58.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AE3CF9C724D9AAB600479226 /* base58.c in Sources */ = {isa = PBXBuildFile; fileRef = AE3CF9C624D9AAB600479226 /* base58.c */; };
 /* End PBXBuildFile section */
 
