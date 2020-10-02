@@ -31,6 +31,6 @@ TESTS = \
 	tests/encode-b58c.sh \
 	tests/encode-fail.sh
 SH_LOG_COMPILER = /bin/sh
-AM_TESTS_ENVIRONMENT = PATH='$(srcdir)':"$$PATH"; export PATH;
+AM_TESTS_ENVIRONMENT = PATH='$(abs_top_builddir)':"$$PATH"; export PATH;
 endif
 TEST_EXTENSIONS = .sh
