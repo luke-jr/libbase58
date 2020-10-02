@@ -14,7 +14,7 @@ the "vim" editor from https://www.vim.org/ or by installing the vim-share packag
 
 Troubleshooting
 --------------------
-If libgcrypt isn't found after install, set AM_PATH_LIBGCRYPT env var to libgcrypt path 
+If libgcrypt isn't found after install, set AM_PATH_LIBGCRYPT env var to libgcrypt path
 prior to running autogen.sh. For example, on OS X with ver 1.7.6:
 
 export AM_PATH_LIBGCRYPT="/usr/local/Cellar/libgcrypt/1.7.6/lib"
