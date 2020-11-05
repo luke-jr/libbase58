@@ -33,6 +33,41 @@ matrix:
             - gcc-mingw-w64-x86-64
             - binutils-mingw-w64-x86-64
             - mingw-w64-x86-64-dev
+    #powerjobs
+    - compiler: ": Complete"
+      env: CONFIGURE_OPTS="--enable-tool --enable-static --enable-shared" MAKE_CHECK=1
+      arch: ppc64le
+      addons:
+        apt:
+            packages:
+            - build-essential
+            - libgcrypt11-dev
+    - compiler: ": No tool/tests"
+      env: CONFIGURE_OPTS="--disable-tool --enable-static --enable-shared"
+      arch: ppc64le
+      addons:
+        apt:
+            packages:
+            - build-essential
+    - compiler: ": Win32 - No tool/tests"
+      env: CONFIGURE_OPTS="--disable-tool --host=i686-w64-mingw32 --enable-static --enable-shared"
+      arch: ppc64le
+      addons:
+        apt:
+            packages:
+            - gcc-mingw-w64-i686
+            - binutils-mingw-w64-i686
+            - mingw-w64-i686-dev
+    - compiler: ": Win64 - No tool/tests"
+      env: CONFIGURE_OPTS="--disable-tool --host=x86_64-w64-mingw32 --enable-static --enable-shared"
+      arch: ppc64le
+      addons:
+        apt:
+            packages:
+            - gcc-mingw-w64-x86-64
+            - binutils-mingw-w64-x86-64
+            - mingw-w64-x86-64-dev
+    
   exclude:
     - compiler: gcc
 install:
