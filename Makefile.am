@@ -3,6 +3,8 @@
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the standard MIT license.  See COPYING for more details.
 
+ACLOCAL_AMFLAGS = -I build-aux/m4
+
 lib_LTLIBRARIES = libbase58.la
 libbase58_la_SOURCES = base58.c
 libbase58_la_LDFLAGS = -version-info $(LIBBASE58_SO_VERSION) -no-undefined
