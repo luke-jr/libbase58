@@ -1,7 +1,6 @@
 
 
-Also i've found readable C version of this stuff:
-https://github.com/breadwallet/breadwallet-core/blob/master/BRBase58.c
+
 
 
 Initialisation
@@ -85,3 +84,12 @@ t:
 ```
 NVhHMCyXNHYRYg5mXw2nSnkLBh
 ```
+
+
+
+ # generator 
+  
+ linux:  
+ ```
+ c++ generator.cpp base58_c.cpp -o c -lcrypto
+ ```
