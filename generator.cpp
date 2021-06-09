@@ -3,6 +3,26 @@
 #include <cstring>
 #include <openssl/sha.h>
 #include <openssl/ripemd.h>
+#include "keccak.h"
+#include <string>
+#include <iomanip>
+
+
+const	std::string bin2hex(const unsigned char *p, size_t length) {
+	std::stringstream f;
+	f<<std::hex << std::setfill('0');
+	for (int i = 0; i < length; i++) f << std::setw(2) << (int)p[i];
+	return f.str();
+}
+
+size_t hex2bin(unsigned char *p , const char *hexstr,const size_t length) {
+	size_t wcount = 0;
+	while ( wcount++ < length && *hexstr && *(hexstr + 1)) {    //last condition cause np if check fails on middle one.thats coz of short-circuit evaluation
+		sscanf(hexstr, "%2hhx",p++);  //7x slower than tables but doesnt metter 
+		hexstr = hexstr+2;
+	}
+	return  --wcount;     // error check here is a waste  
+}	
 
 int main()
 {	
@@ -31,6 +51,18 @@ int main()
 	b58enc(tbitaddr,&cbit,(void *)bitaddr,(size_t)(sizeof(bitaddr)));
 	b58enc(t,&c,(void *)b,(size_t)(sizeof(b)-1));
 	std::cout << "pubkey :" << std::endl << t << std::endl << "address:" << std::endl << tbitaddr << std::endl;
+	
+
+	const unsigned char etpubkey[65] = "BurnItAll0000000000000000000000000000000000000000000000000000000";
+	unsigned char ethashtag[32] = {};
+	unsigned char etaddr[20] = {};
+
+	Keccak keccak256(Keccak::Keccak256);
+	hex2bin(ethashtag,keccak256((char *)etpubkey,64).c_str(),32);
+	memcpy(etaddr, ethashtag, 20);
+	std::string etaddrstring = "0x" + bin2hex(etaddr,20);
+	std::cout << "et pubkey :" << std::endl << "0x" + bin2hex(etpubkey,64) << std::endl << "et address:" << std::endl << etaddrstring << std::endl;
+
 
 	return 0;
 }
