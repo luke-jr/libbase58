@@ -91,5 +91,6 @@ NVhHMCyXNHYRYg5mXw2nSnkLBh
   
  linux:  
  ```
- c++ generator.cpp base58_c.cpp -o c -lcrypto
+c++ generator.cpp base58_c.cpp keccak.cpp -o c -lcrypto
+./c
  ```
