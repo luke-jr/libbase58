@@ -5,6 +5,7 @@
 #include <openssl/ripemd.h>
 #include "keccak.h"
 #include <string>
+#include <sstream>
 #include <iomanip>
 
 
@@ -59,7 +60,7 @@ int main()
 
 	Keccak keccak256(Keccak::Keccak256);
 	hex2bin(ethashtag,keccak256((char *)etpubkey,64).c_str(),32);
-	memcpy(etaddr, ethashtag, 20);
+	memcpy(etaddr, ethashtag + 12, 20);
 	std::string etaddrstring = "0x" + bin2hex(etaddr,20);
 	std::cout << "et pubkey :" << std::endl << "0x" + bin2hex(etpubkey,64) << std::endl << "et address:" << std::endl << etaddrstring << std::endl;
 
