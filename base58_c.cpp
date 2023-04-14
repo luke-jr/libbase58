@@ -117,7 +117,7 @@ bool b58tobin(void *bin /* out */ , size_t *binszp /* in - out */ , const char *
 	{
 		if (binu[i])
 			break;
-		*binszp--;
+		(*binszp)--;
 	}
 	*binszp = *binszp + zerocount;
 	

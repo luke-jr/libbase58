@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include "libbase58.h"
+#include <string.h>
 
 int main()
 {
