@@ -95,7 +95,7 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	for (; j < outisz; ++j)
 	{
 		for (i = sizeof(*outi); i > 0; --i) {
-			*(binu++) = (outi[j] >> (8 * (i - 1))) & 0xff;
+			*(binu++) = (outi[j] >> (8 * (i - 1))) & 0xff;// LSB only
 		}
 	}
 	
