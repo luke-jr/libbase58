@@ -146,8 +146,9 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 {
 	const uint8_t *bin = data;
 	int carry;
-	size_t i, j, high, zcount = 0;
+	size_t i, high, zcount = 0;
 	size_t size;
+	ptrdiff_t j;
 	
 	while (zcount < binsz && !bin[zcount])
 		++zcount;
@@ -163,10 +164,6 @@ bool b58enc(char *b58, size_t *b58sz, const void *data, size_t binsz)
 			carry += 256 * buf[j];
 			buf[j] = carry % 58;
 			carry /= 58;
-			if (!j) {
-				// Otherwise j wraps to maxint which is > high
-				break;
-			}
 		}
 	}
 	
